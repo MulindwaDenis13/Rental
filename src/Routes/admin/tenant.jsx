@@ -23,7 +23,7 @@ closePopUp = (event, reason) => {
   });
 };
 
-class Room extends Component {
+class Tenant extends Component {
   constructor(props) {
     super(props);
     this.state = {};
@@ -73,7 +73,7 @@ class Room extends Component {
                   >
                     <div className="form-header-ctr">
                       <div className="">
-                        <h3>New Room</h3>
+                        <h3>New Tenant</h3>
                       </div>
                       <div className="">
                         <Button
@@ -99,25 +99,22 @@ class Room extends Component {
                   <div className="card-body">
                     <div>
                       <div className="inputCtr">
-                        <h4>Room Details</h4>
+                        <h4>Tenant Details</h4>
                         <div className="input_ctr">
                           <div className="inpts_on_left">
                             <TextField
-                              name="number"
+                              name="first_name"
                               variant="outlined"
-                              label="Room Number"
+                              label="First Name"
                               style={{
                                 width: "75%",
                                 margin: "20px",
                               }}
                             />
-                          </div>
-                          <div className="inpts_center">
                             <TextField
-                              type="number"
-                              name="surname"
+                              name="last_name"
                               variant="outlined"
-                              label="Fee(UGX) Monthly"
+                              label="Last Name"
                               style={{
                                 width: "75%",
                                 margin: "20px",
@@ -126,9 +123,18 @@ class Room extends Component {
                           </div>
                           <div className="inpts_on_right">
                             <TextField
-                              name="type"
+                              name="contact"
                               variant="outlined"
-                              label="Room Type"
+                              label="Phonenumber"
+                              style={{
+                                width: "75%",
+                                margin: "20px",
+                              }}
+                            />
+                            <TextField
+                              name="address"
+                              variant="outlined"
+                              label="Address"
                               style={{
                                 width: "75%",
                                 margin: "20px",
@@ -150,4 +156,4 @@ class Room extends Component {
   }
 }
 
-export default Room;
+export default Tenant;
