@@ -5,7 +5,7 @@ import "line-awesome/dist/line-awesome/css/line-awesome.css";
 
 import Dashboard from "../Routes/admin/dashboard";
 import Tenant from "../Routes/admin/tenant";
-import Room from "..Routes/admin/room";
+import Room from "../Routes/admin/room";
 
 class Admin extends Component {
   constructor(props) {
@@ -13,7 +13,17 @@ class Admin extends Component {
     this.state = {};
   }
   render() {
-    return <></>;
+    return (
+      <BrowserRouter>
+        <div>
+          <Switch>
+            <Route path="/" exact component={Dashboard} />
+            <Route path="/new-room" exact component={Room} />
+            <Route path="/new-tenant" exact component={Tenant} />
+          </Switch>
+        </div>
+      </BrowserRouter>
+    );
   }
 }
 

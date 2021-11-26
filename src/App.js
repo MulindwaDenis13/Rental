@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import Admin from "./user_routing/admin";
+import Login from "./components/login";
+import user from "./config";
 
 class App extends Component {
   constructor(props) {
@@ -6,7 +9,11 @@ class App extends Component {
     this.state = {};
   }
   render() {
-    return <h1>Hello Mulindwa</h1>;
+    if (user.user.user_id) {
+      return <Admin />;
+    } else {
+      return <Login />;
+    }
   }
 }
 

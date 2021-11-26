@@ -11,23 +11,28 @@ function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-closePopUp = (event, reason) => {
-  if (reason === "clickaway") {
-    return;
-  }
-  this.setState({
-    ...this.state,
-    open: false,
-    message: "Please Wait...",
-    messageState: "info",
-  });
-};
-
 class Room extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      open: false,
+      message: "",
+      messageState: "",
+    };
   }
+
+  closePopUp = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    this.setState({
+      ...this.state,
+      open: false,
+      message: "Please Wait...",
+      messageState: "info",
+    });
+  };
+
   render() {
     return (
       <>
@@ -100,7 +105,7 @@ class Room extends Component {
                     <div>
                       <div className="inputCtr">
                         <h4>Room Details</h4>
-                        <div className="input_ctr">
+                        <div className="inputs_ctr">
                           <div className="inpts_on_left">
                             <TextField
                               name="number"

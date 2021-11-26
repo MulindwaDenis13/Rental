@@ -18,7 +18,7 @@ class Dashboard extends Component {
   }
 
   handleOpenActions = (e) => {
-    this.setState({ ...this.state, AnchorElDrugs: e.currentTarget });
+    this.setState({ ...this.state, AnchorEl: e.currentTarget });
   };
   handleCloseActions = () => {
     this.setState({ ...this.state, AnchorEl: null });
@@ -90,7 +90,7 @@ class Dashboard extends Component {
                       aria-haspopup="true"
                       onClick={this.handleOpenActionsRooms}
                     >
-                      Other Menu
+                      Menu
                       <span style={{ fontSize: "17.5px", marginLeft: "10px" }}>
                         <span className="las la-angle-down"></span>
                       </span>
@@ -139,7 +139,7 @@ class Dashboard extends Component {
                     >
                       <Link to="/new-tenant">
                         <MenuItem onClick={this.handleCloseActions}>
-                          New Room
+                          New Tenant
                         </MenuItem>
                       </Link>
                     </Menu>

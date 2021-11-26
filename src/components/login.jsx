@@ -54,7 +54,7 @@ function Login() {
             margin: "15px 0px",
           }}
         >
-          Immunisation
+          Rental
         </div>
         <div className="loginCtr">
           <TextField
@@ -116,7 +116,7 @@ function Login() {
         </div>
         {/* for loader */}
       </div>
-      <img src={Image} className="img" alt="Hospital" />
+      <img src={Image} className="img" alt="Rental" />
     </div>
   );
 }

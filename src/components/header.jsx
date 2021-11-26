@@ -39,7 +39,7 @@ function Header() {
           <label htmlFor="nav-toggle">
             <span className="las la-bars"></span>
           </label>
-          <span className="health_unit_name">Immunisation</span>
+          <span className="health_unit_name">Rental Management</span>
         </h2>
         {/* <div className="search-wrapper">
           <span className="las la-search"></span>
