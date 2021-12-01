@@ -108,6 +108,11 @@ class Dashboard extends Component {
                           New Room
                         </MenuItem>
                       </Link>
+                      <Link to="/new-room-allocation">
+                        <MenuItem onClick={this.handleCloseActionsRooms}>
+                          New Allocation
+                        </MenuItem>
+                      </Link>
                     </Menu>
                   </div>
                   <div className="card-body"></div>
@@ -140,6 +145,11 @@ class Dashboard extends Component {
                       <Link to="/new-tenant">
                         <MenuItem onClick={this.handleCloseActions}>
                           New Tenant
+                        </MenuItem>
+                      </Link>
+                      <Link to="/new-payment">
+                        <MenuItem onClick={this.handleCloseActions}>
+                          New Payment
                         </MenuItem>
                       </Link>
                     </Menu>

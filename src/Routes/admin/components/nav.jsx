@@ -36,62 +36,38 @@ class Nav extends Component {
                 </li>
 
                 <li>
-                  <Link to="/doctors">
+                  <Link to="/rooms">
                     <span
                       className={`${
-                        this.props.active === "doctors" ? "active" : ""
+                        this.props.active === "rooms" ? "active" : ""
                       } _a_replaced`}
                     >
                       <span className="las la-address-book"></span>
-                      <span>Doctors</span>
+                      <span>Rooms</span>
                     </span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/recepients">
+                  <Link to="/tenants">
                     <span
                       className={`${
-                        this.props.active === "recepients" ? "active" : ""
+                        this.props.active === "tenants" ? "active" : ""
                       } _a_replaced`}
                     >
-                      <span className="las la-user-injured"></span>
-                      <span>Recepients</span>
+                      <span className="las la-users"></span>
+                      <span>Tenants</span>
                     </span>
                   </Link>
                 </li>
                 <li>
-                  <Link to="/vaccines">
+                  <Link to="/payments">
                     <span
                       className={`${
-                        this.props.active === "vaccines" ? "active" : ""
+                        this.props.active === "payments" ? "active" : ""
                       } _a_replaced`}
                     >
-                      <span className="las la-medkit"></span>
-                      <span>Vaccines</span>
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/vaccinations">
-                    <span
-                      className={`${
-                        this.props.active === "vaccinations" ? "active" : ""
-                      } _a_replaced`}
-                    >
-                      <span className="las la-notes-medical"></span>
-                      <span>Vaccinations</span>
-                    </span>
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/analytics">
-                    <span
-                      className={`${
-                        this.props.active === "charts" ? "active" : ""
-                      } _a_replaced`}
-                    >
-                      <span className="las la-chart-bar"></span>
-                      <span>Analytics</span>
+                      <span className="las la-dollar-sign"></span>
+                      <span>Payments</span>
                     </span>
                   </Link>
                 </li>

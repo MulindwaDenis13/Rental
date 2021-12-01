@@ -60,7 +60,7 @@ class Tenant extends Component {
           </Alert>
         </Snackbar>
         <input type="checkbox" id="nav-toggle" defaultChecked />
-        <Nav active="users" />
+        <Nav active="tenants" />
         <div className="main-content">
           <Header />
           <main>

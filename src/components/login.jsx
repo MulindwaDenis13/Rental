@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { TextField, Button, CircularProgress } from "@material-ui/core";
-import Image from "../assets/doctor.png";
-import Logo from "../assets/logo_hospital.png";
+// import Image from "../assets/doctor.png";
+import Logo from "../assets/logo.png";
 import "./login.css";
 import { Base64 } from "js-base64";
 import UsersApi from "../api/users";
@@ -116,7 +116,7 @@ function Login() {
         </div>
         {/* for loader */}
       </div>
-      <img src={Image} className="img" alt="Rental" />
+      {/* <img src={Image} className="img" alt="Rental" /> */}
     </div>
   );
 }

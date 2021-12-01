@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Admin from "./user_routing/admin";
-import Login from "./components/login";
-import user from "./config";
+// import Login from "./components/login";
+// import user from "./config";
 
 class App extends Component {
   constructor(props) {
@@ -9,11 +9,12 @@ class App extends Component {
     this.state = {};
   }
   render() {
-    if (user.user.user_id) {
-      return <Admin />;
-    } else {
-      return <Login />;
-    }
+    // if (user.user.user_id) {
+    //   return <Admin />;
+    // } else {
+    //   return <Login />;
+    // }
+    return <Admin />;
   }
 }
 

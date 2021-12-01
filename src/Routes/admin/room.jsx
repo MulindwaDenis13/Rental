@@ -62,7 +62,7 @@ class Room extends Component {
           </Alert>
         </Snackbar>
         <input type="checkbox" id="nav-toggle" defaultChecked />
-        <Nav active="users" />
+        <Nav active="rooms" />
         <div className="main-content">
           <Header />
           <main>
@@ -120,7 +120,7 @@ class Room extends Component {
                           <div className="inpts_center">
                             <TextField
                               type="number"
-                              name="surname"
+                              name="fee"
                               variant="outlined"
                               label="Fee(UGX) Monthly"
                               style={{
