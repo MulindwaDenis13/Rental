@@ -1,48 +1,28 @@
 {
   "name": "rental",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@fontsource/ubuntu": "^4.5.0",
-    "@material-ui/core": "^4.12.3",
-    "@material-ui/lab": "^4.0.0-alpha.60",
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^11.2.7",
-    "@testing-library/user-event": "^12.8.3",
-    "axios": "^0.21.4",
-    "chart.js": "^3.6.0",
-    "js-base64": "^3.7.0",
-    "line-awesome": "^1.3.0",
-    "react": "^17.0.2",
-    "react-chartjs-2": "^3.3.0",
-    "react-dom": "^17.0.2",
-    "react-router-dom": "^5.3.0",
-    "react-scripts": "4.0.3",
-    "react-to-print": "^2.14.0",
-    "web-vitals": "^1.1.2"
-  },
+  "version": "1.0.0",
+  "description": "Client Rental Management System",
+  "main": "index.js",
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "nodemon index",
+    "dev": "nodemon index"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MulindwaDenis13/Rental.git"
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "author": "Mulindwa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MulindwaDenis13/Rental/issues"
+  },
+  "homepage": "https://github.com/MulindwaDenis13/Rental#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mysql8": "^2.17.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }
