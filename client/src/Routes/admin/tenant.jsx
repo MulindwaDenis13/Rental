@@ -4,6 +4,7 @@ import Nav from "./components/nav";
 import Header from "../../components/header";
 import Footer from "../../components/footer";
 import MuiAlert from "@material-ui/lab/Alert";
+import Api from "../../api/users";
 import "../../design/forms.css";
 import "../../design/main.css";
 
@@ -20,6 +21,7 @@ class Tenant extends Component {
       messageState: "",
     };
   }
+
   closePopUp = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -31,6 +33,42 @@ class Tenant extends Component {
       messageState: "info",
     });
   };
+
+  handleTenant = async (e) => {
+    e.preventDefault();
+    this.setState({
+      ...this.state,
+      open: true,
+      message: "Please Wait....",
+      messageState: "info",
+    });
+    const fd = new FormData(e.target);
+    let form_content = {};
+    fd.forEach((value, key) => {
+      form_content[key] = value;
+    });
+    let api = new Api();
+    let result = await api.post("/new-tenant", form_content);
+    if (result !== "Error") {
+      if (result.status === true) {
+        this.setState({
+          ...this.state,
+          message: result.data,
+          messageState: "success",
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+      } else {
+        this.setState({
+          ...this.state,
+          messageState: "error",
+          message: result.data,
+        });
+      }
+    }
+  };
+
   render() {
     return (
       <>
@@ -66,7 +104,11 @@ class Tenant extends Component {
           <main>
             <div className="fullwidth-ctr">
               <div className="projects">
-                <form className="card" autoComplete="off">
+                <form
+                  className="card"
+                  autoComplete="off"
+                  onSubmit={this.handleTenant}
+                >
                   <div
                     className=""
                     style={{
@@ -126,6 +168,7 @@ class Tenant extends Component {
                           </div>
                           <div className="inpts_on_right">
                             <TextField
+                              type="number"
                               name="contact"
                               variant="outlined"
                               label="Phonenumber"
