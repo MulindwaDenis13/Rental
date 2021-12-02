@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const e = require("express");
 const conn = require("../database/db");
 
 router.post("/new-room", async (req, res) => {
@@ -79,6 +80,45 @@ router.post("/new-tenant", async (req, res) => {
       }
     }
   );
+});
+
+router.get("/search-tenant/:id", async (req, res) => {
+  let pattern = /\W/g;
+  let check = pattern.test(req.params.id);
+  if (check === true) {
+    res.send([]);
+    return;
+  } else {
+    conn.query(
+      `SELECT * FROM tenants_tbl 
+      WHERE tenant_first_name LIKE '%${req.params.id}%'`,
+      req.params.id,
+      (search_err, search_res) => {
+        if (search_err) throw search_err;
+        res.send(search_res);
+      }
+    );
+  }
+});
+
+router.get("/search-room/:id", async (req, res) => {
+  let pattern = /\W/g;
+  let check = pattern.test(req.params.id);
+  if (check === true) {
+    res.send([]);
+    return;
+  } else {
+    conn.query(
+      `SELECT * FROM rooms_tbl 
+      WHERE room_no LIKE '%${req.params.id}%' AND
+       room_status = 'Free'`,
+      req.params.id,
+      (search_err, search_res) => {
+        if (search_err) throw search_err;
+        res.send(search_res);
+      }
+    );
+  }
 });
 
 module.exports = router;

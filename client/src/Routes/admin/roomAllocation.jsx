@@ -3,6 +3,7 @@ import Header from "../../components/header";
 import Nav from "./components/nav";
 import Footer from "../../components/footer";
 import MuiAlert from "@material-ui/lab/Alert";
+import Api from "../../api/users";
 import { TextField, Snackbar, Button, IconButton } from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 
@@ -22,8 +23,12 @@ class RoomAllocation extends Component {
       message: "Please Wait...",
       messageState: "",
       empty_error: false,
+      formData: [],
+      tenants: [],
+      rooms: [],
     };
   }
+
   render() {
     return (
       <>
@@ -151,12 +156,20 @@ class RoomAllocation extends Component {
                           <div className="inpts_on_left">
                             <Autocomplete
                               id="combo-box-demo"
-                              //   options={this.state.vaccines}
-                              //   getOptionLabel={(option) =>
-                              //     `${option.vaccine_name}`
-                              //   }
+                              options={this.state.tenants}
+                              getOptionLabel={(option) =>
+                                `${option.tenant_first_name} ${option.tenant_last_name}`
+                              }
                               // onChange={this.handleChangeVaccineName}
-                              // onKeyUp={this.handleDrugNameKeyUp}
+                              onKeyUp={async (e) => {
+                                let res = await Api.data(
+                                  `/search-tenant/${e.target.value}`
+                                );
+                                this.setState({
+                                  ...this.state,
+                                  tenants: res === "Error" ? [] : res,
+                                });
+                              }}
                               style={{
                                 width: "85%",
                                 margin: "20px",
@@ -168,26 +181,25 @@ class RoomAllocation extends Component {
                                   name="room"
                                   variant="outlined"
                                   error={this.state.error}
-                                  //   onChange={(e) => {
-                                  //     this.setState({
-                                  //       ...this.state,
-                                  //       required: {
-                                  //         ...this.state.required,
-                                  //         vaccine_name: e.target.value,
-                                  //       },
-                                  //     });
-                                  //   }}
                                 />
                               )}
                             />
                             <Autocomplete
                               id="combo-box-demo"
-                              //   options={this.state.vaccines}
-                              //   getOptionLabel={(option) =>
-                              //     `${option.vaccine_name}`
-                              //   }
+                              options={this.state.rooms}
+                              getOptionLabel={(option) =>
+                                `${option.room_no} - ${option.room_fee}UGX`
+                              }
                               // onChange={this.handleChangeVaccineName}
-                              // onKeyUp={this.handleDrugNameKeyUp}
+                              onKeyUp={async (e) => {
+                                let res = await Api.data(
+                                  `/search-room/${e.target.value}`
+                                );
+                                this.setState({
+                                  ...this.state,
+                                  rooms: res === "Error" ? [] : res,
+                                });
+                              }}
                               style={{
                                 width: "85%",
                                 margin: "20px",
