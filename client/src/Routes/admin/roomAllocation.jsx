@@ -20,14 +20,88 @@ class RoomAllocation extends Component {
     this.state = {
       error: false,
       open: false,
-      message: "Please Wait...",
+      message: "",
       messageState: "",
       empty_error: false,
+      active_room: {},
+      active_tenant: {},
       formData: [],
       tenants: [],
       rooms: [],
     };
   }
+
+  handleAllocation = async () => {
+    this.setState({
+      ...this.state,
+      open: true,
+      message: "Please Wait...",
+      messageState: "info",
+    });
+    let content = {};
+    content["rooms"] = this.state.formData;
+    content["tenant"] = this.state.active_tenant;
+    content["date"] = Date.now();
+    const api = new Api();
+    let result = await api.post("/new-allocation", content);
+    if (result !== "Error") {
+      if (result.status === true) {
+        this.setState({
+          ...this.state,
+          open: true,
+          messageState: "success",
+          message: result.data,
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+      } else {
+        this.setState({
+          ...this.state,
+          open: true,
+          messageState: "error",
+          message: result.data,
+        });
+      }
+    }
+  };
+
+  handleSubmit = async (e) => {
+    e.preventDefault();
+    this.setState({
+      ...this.state,
+      open: true,
+      message: "Please Wait...",
+      messageState: "info",
+    });
+    let room_no = this.state.formData.find(
+      (i) => i.room_no === this.state.active_room.room_no
+    );
+
+    if (!room_no) {
+      this.setState({
+        ...this.state,
+        open: true,
+        messageState: "success",
+        message: "Room Added",
+        formData: [...this.state.formData, this.state.active_room],
+      });
+    } else {
+      this.setState({
+        ...this.state,
+        open: true,
+        message: "Room Exists",
+        messageState: "warning",
+      });
+    }
+  };
+
+  handleChangeTenant = (e, v) => {
+    this.setState({ ...this.state, active_tenant: v });
+  };
+  handleChangeRoom = (e, v) => {
+    this.setState({ ...this.state, active_room: v });
+  };
 
   render() {
     return (
@@ -70,6 +144,7 @@ class RoomAllocation extends Component {
                     variant="contained"
                     color="primary"
                     style={{ marginRight: 10 }}
+                    onClick={this.handleAllocation}
                   >
                     <span style={{ fontSize: "17.5px", marginRight: "10px" }}>
                       <i className="las la-save"></i>
@@ -87,17 +162,17 @@ class RoomAllocation extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      {/* {this.state.formData.length === 0 ? (
+                      {this.state.formData.length === 0 ? (
                         <tr>
-                          <td>No Vaccine Added</td>
+                          <td>No Room Added</td>
                         </tr>
                       ) : (
                         this.state.formData.map((v, i) => {
                           return (
                             <tr key={i}>
-                              <td className="name_cell">{v.vaccine_name}</td>
-                              <td>{v.sight_of_vaccination}</td>
-                              <td>{v.disease_prevented}</td>
+                              <td className="name_cell">{v.room_no}</td>
+                              <td>{v.room_type}</td>
+                              <td>{v.room_fee}</td>
                               <td>
                                 <Button
                                   variant="contained"
@@ -117,7 +192,7 @@ class RoomAllocation extends Component {
                             </tr>
                           );
                         })
-                      )} */}
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -160,7 +235,7 @@ class RoomAllocation extends Component {
                               getOptionLabel={(option) =>
                                 `${option.tenant_first_name} ${option.tenant_last_name}`
                               }
-                              // onChange={this.handleChangeVaccineName}
+                              onChange={this.handleChangeTenant}
                               onKeyUp={async (e) => {
                                 let res = await Api.data(
                                   `/search-tenant/${e.target.value}`
@@ -188,9 +263,9 @@ class RoomAllocation extends Component {
                               id="combo-box-demo"
                               options={this.state.rooms}
                               getOptionLabel={(option) =>
-                                `${option.room_no} - ${option.room_fee}UGX`
+                                `${option.room_no} ${option.room_fee}UGX`
                               }
-                              // onChange={this.handleChangeVaccineName}
+                              onChange={this.handleChangeRoom}
                               onKeyUp={async (e) => {
                                 let res = await Api.data(
                                   `/search-room/${e.target.value}`
@@ -211,15 +286,6 @@ class RoomAllocation extends Component {
                                   name="room"
                                   variant="outlined"
                                   error={this.state.error}
-                                  //   onChange={(e) => {
-                                  //     this.setState({
-                                  //       ...this.state,
-                                  //       required: {
-                                  //         ...this.state.required,
-                                  //         vaccine_name: e.target.value,
-                                  //       },
-                                  //     });
-                                  //   }}
                                 />
                               )}
                             />

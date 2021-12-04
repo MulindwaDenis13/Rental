@@ -2,9 +2,9 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "@fontsource/ubuntu";
 import App from "./App";
-import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import { MuiThemeProvider, createTheme } from "@material-ui/core/styles";
 
-const THEME = createMuiTheme({
+const THEME = createTheme({
   typography: {
     fontFamily: `"Ubuntu", sans-serifs`,
     fontSize: 14,

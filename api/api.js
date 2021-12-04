@@ -82,6 +82,46 @@ router.post("/new-tenant", async (req, res) => {
   );
 });
 
+router.post("/new-allocation", async (req, res) => {
+  let { rooms, tenant, date } = req.body;
+  rooms.forEach((i) => {
+    conn.query(
+      `INSERT INTO tenant_room_tbl SET ?`,
+      {
+        tenant_id: tenant.tenant_id,
+        rooms_id: i.room_id,
+        allocation_date: date,
+      },
+      (insert_err, insert_res) => {
+        if (insert_err) {
+          console.log(insert_err);
+          res.send({ data: "An Error Occured. Try Again", status: false });
+        } else {
+          conn.query(
+            `UPDATE rooms_tbl SET ? WHERE room_id = ?`,
+            [
+              {
+                room_status: "Booked",
+              },
+              i.room_id,
+            ],
+            (update_err, update_res) => {
+              if (update_err) {
+                console.log(update_err);
+                res.send({
+                  data: "An Error Occured. Try Again",
+                  status: false,
+                });
+              }
+            }
+          );
+        }
+      }
+    );
+  });
+  res.send({ data: "Allocation Successful", status: true });
+});
+
 router.get("/search-tenant/:id", async (req, res) => {
   let pattern = /\W/g;
   let check = pattern.test(req.params.id);

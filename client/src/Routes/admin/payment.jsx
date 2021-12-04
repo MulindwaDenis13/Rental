@@ -3,8 +3,18 @@ import Header from "../../components/header";
 import Nav from "./components/nav";
 import Footer from "../../components/footer";
 import MuiAlert from "@material-ui/lab/Alert";
-import { TextField, Snackbar, Button, IconButton } from "@material-ui/core";
+import {
+  TextField,
+  Snackbar,
+  Button,
+  IconButton,
+  Select,
+  InputLabel,
+  FormControl,
+  MenuItem,
+} from "@material-ui/core";
 import Autocomplete from "@material-ui/lab/Autocomplete";
+import Api from "../../api/users";
 
 import "../../design/main.css";
 import "../../design/forms.css";
@@ -22,6 +32,8 @@ class Payment extends Component {
       message: "Please Wait...",
       messageState: "",
       empty_error: false,
+      tenants: [],
+      active_tenant: {},
     };
   }
   render() {
@@ -150,12 +162,20 @@ class Payment extends Component {
                           <div className="inpts_on_left">
                             <Autocomplete
                               id="combo-box-demo"
-                              //   options={this.state.vaccines}
-                              //   getOptionLabel={(option) =>
-                              //     `${option.vaccine_name}`
-                              //   }
+                              options={this.state.tenants}
+                              getOptionLabel={(option) =>
+                                `${option.tenant_first_name} ${option.tenant_last_name}`
+                              }
                               // onChange={this.handleChangeVaccineName}
-                              // onKeyUp={this.handleDrugNameKeyUp}
+                              onKeyUp={async (e) => {
+                                let res = await Api.data(
+                                  `/search-tenant/${e.target.value}`
+                                );
+                                this.setState({
+                                  ...this.state,
+                                  tenants: res === "Error" ? [] : res,
+                                });
+                              }}
                               style={{
                                 width: "85%",
                                 margin: "20px",
@@ -167,49 +187,28 @@ class Payment extends Component {
                                   name="room"
                                   variant="outlined"
                                   error={this.state.error}
-                                  //   onChange={(e) => {
-                                  //     this.setState({
-                                  //       ...this.state,
-                                  //       required: {
-                                  //         ...this.state.required,
-                                  //         vaccine_name: e.target.value,
-                                  //       },
-                                  //     });
-                                  //   }}
                                 />
                               )}
                             />
-                            <Autocomplete
-                              id="combo-box-demo"
-                              //   options={this.state.vaccines}
-                              //   getOptionLabel={(option) =>
-                              //     `${option.vaccine_name}`
-                              //   }
-                              // onChange={this.handleChangeVaccineName}
-                              // onKeyUp={this.handleDrugNameKeyUp}
+                            <FormControl
+                              variant="outlined"
+                              label="room"
                               style={{
-                                width: "85%",
+                                width: "80%",
                                 margin: "20px",
                               }}
-                              renderInput={(params) => (
-                                <TextField
-                                  {...params}
-                                  label="Search Room"
-                                  name="room"
-                                  variant="outlined"
-                                  error={this.state.error}
-                                  //   onChange={(e) => {
-                                  //     this.setState({
-                                  //       ...this.state,
-                                  //       required: {
-                                  //         ...this.state.required,
-                                  //         vaccine_name: e.target.value,
-                                  //       },
-                                  //     });
-                                  //   }}
-                                />
-                              )}
-                            />
+                            >
+                              <InputLabel id="room">Room</InputLabel>
+                              <Select
+                                inputProps={{ name: "room" }}
+                                id="select_room"
+                                label="Room"
+                                defaultValue="single"
+                              >
+                                <MenuItem value="single">Single</MenuItem>
+                                <MenuItem value="double">Double</MenuItem>
+                              </Select>
+                            </FormControl>
                             <TextField
                               name="amount"
                               variant="outlined"
