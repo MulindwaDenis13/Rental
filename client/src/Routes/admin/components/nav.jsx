@@ -17,7 +17,7 @@ class Nav extends Component {
             <div className="sidebar-brand">
               <h2>
                 <span className="lab la-accusoft"></span>
-                <span>Hospital</span>
+                <span>Rental</span>
               </h2>
             </div>
             <div className="sidebar-menu">
