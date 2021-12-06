@@ -29,13 +29,90 @@ class Payment extends Component {
     this.state = {
       error: false,
       open: false,
-      message: "Please Wait...",
+      message: "",
       messageState: "",
       empty_error: false,
+      formData: [],
       tenants: [],
+      tenant_rooms: [],
       active_tenant: {},
+      active_room: {},
+      fee: 0,
     };
   }
+
+  closePopUp = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    this.setState({
+      ...this.state,
+      open: false,
+      message: "Please Wait...",
+      messageState: "info",
+    });
+  };
+
+  handleChange = async (e, v) => {
+    await this.setState({ ...this.state, active_tenant: v });
+    let result = await Api.data(`/tenant-rooms/${v.tenant_id}`);
+    this.setState({
+      ...this.state,
+      tenant_rooms: result === "Error" ? [] : result,
+    });
+  };
+
+  handlePeriod = (e) => {
+    e.target.value === "month"
+      ? this.setState({ ...this.state, fee: this.state.active_room.room_fee })
+      : this.setState({
+          ...this.state,
+          fee: this.state.active_room.room_fee * 3,
+        });
+  };
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.setState({
+      ...this.state,
+      open: true,
+      message: "Please Wait...",
+      messageState: "info",
+    });
+    let content = {};
+    let data = {};
+    const fd = new FormData(e.target);
+    fd.forEach((value, key) => {
+      content[key] = value;
+    });
+    data["room_no"] = this.state.active_room.room_no;
+    data["room_id"] = this.state.active_room.room_id;
+    data["room_fee"] = this.state.active_room.room_fee;
+    data["paid"] = this.state.fee;
+    data["period"] = content.period;
+
+    let room_no = this.state.formData.find(
+      (i) => i.room_no === this.state.active_room.room_no
+    );
+
+    if (!room_no) {
+      this.setState({
+        ...this.state,
+        open: true,
+        messageState: "success",
+        message: "Room Payment Added",
+        formData: [...this.state.formData, data],
+      });
+    } else {
+      this.setState({
+        ...this.state,
+        open: true,
+        messageState: "error",
+        message: "Room Payment Exists",
+      });
+    }
+  };
+
   render() {
     return (
       <>
@@ -91,21 +168,22 @@ class Payment extends Component {
                         <td>Room Number</td>
                         <td>Fee(UGX)</td>
                         <td>Paid(UGX)</td>
-                        <td>Balance(UGX)</td>
+                        <td>Period</td>
                       </tr>
                     </thead>
                     <tbody>
-                      {/* {this.state.formData.length === 0 ? (
+                      {this.state.formData.length === 0 ? (
                         <tr>
-                          <td>No Vaccine Added</td>
+                          <td>No Payment Added</td>
                         </tr>
                       ) : (
                         this.state.formData.map((v, i) => {
                           return (
                             <tr key={i}>
-                              <td className="name_cell">{v.vaccine_name}</td>
-                              <td>{v.sight_of_vaccination}</td>
-                              <td>{v.disease_prevented}</td>
+                              <td className="name_cell">{v.room_no}</td>
+                              <td>{v.room_fee}</td>
+                              <td>{v.paid}</td>
+                              <td>{v.period}</td>
                               <td>
                                 <Button
                                   variant="contained"
@@ -125,7 +203,7 @@ class Payment extends Component {
                             </tr>
                           );
                         })
-                      )} */}
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -166,7 +244,7 @@ class Payment extends Component {
                               getOptionLabel={(option) =>
                                 `${option.tenant_first_name} ${option.tenant_last_name}`
                               }
-                              // onChange={this.handleChangeVaccineName}
+                              onChange={this.handleChange}
                               onKeyUp={async (e) => {
                                 let res = await Api.data(
                                   `/search-tenant/${e.target.value}`
@@ -203,10 +281,47 @@ class Payment extends Component {
                                 inputProps={{ name: "room" }}
                                 id="select_room"
                                 label="Room"
-                                defaultValue="single"
+                                defaultValue=""
+                                onChange={(e, v) => {
+                                  let selectedRoom =
+                                    this.state.tenant_rooms.find(
+                                      (i) => i.room_id === e.target.value
+                                    );
+                                  this.setState({
+                                    ...this.state,
+                                    active_room: selectedRoom,
+                                  });
+                                }}
                               >
-                                <MenuItem value="single">Single</MenuItem>
-                                <MenuItem value="double">Double</MenuItem>
+                                {this.state.tenant_rooms.length === 0
+                                  ? "No Room for this Tenant"
+                                  : this.state.tenant_rooms.map((v, i) => {
+                                      return (
+                                        <MenuItem value={v.room_id} key={i}>
+                                          {v.room_no}
+                                        </MenuItem>
+                                      );
+                                    })}
+                              </Select>
+                            </FormControl>
+
+                            <FormControl
+                              variant="outlined"
+                              label="period"
+                              style={{
+                                width: "80%",
+                                margin: "20px",
+                              }}
+                            >
+                              <InputLabel id="room">Period</InputLabel>
+                              <Select
+                                inputProps={{ name: "period" }}
+                                id="select_period"
+                                label="Period"
+                                onChange={this.handlePeriod}
+                              >
+                                <MenuItem value="month">Monthly</MenuItem>
+                                <MenuItem value="quarter">Quarterly</MenuItem>
                               </Select>
                             </FormControl>
                             <TextField
@@ -217,6 +332,7 @@ class Payment extends Component {
                                 width: "75%",
                                 margin: "20px",
                               }}
+                              value={this.state.fee}
                             />
                           </div>
                         </div>

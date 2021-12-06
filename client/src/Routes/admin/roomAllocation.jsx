@@ -31,6 +31,18 @@ class RoomAllocation extends Component {
     };
   }
 
+  closePopUp = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    this.setState({
+      ...this.state,
+      open: false,
+      message: "Please Wait...",
+      messageState: "info",
+    });
+  };
+
   handleAllocation = async () => {
     this.setState({
       ...this.state,

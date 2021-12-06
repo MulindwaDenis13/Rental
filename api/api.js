@@ -122,6 +122,20 @@ router.post("/new-allocation", async (req, res) => {
   res.send({ data: "Allocation Successful", status: true });
 });
 
+router.get("/tenant-rooms/:id", async (req, res) => {
+  conn.query(
+    `SELECT * FROM tenant_room_tbl 
+    JOIN rooms_tbl ON 
+    tenant_room_tbl.rooms_id = rooms_tbl.room_id
+     WHERE tenant_room_tbl.tenant_id = ?`,
+    req.params.id,
+    (first_err, first_res) => {
+      if (first_err) throw first_err;
+      res.send(first_res);
+    }
+  );
+});
+
 router.get("/search-tenant/:id", async (req, res) => {
   let pattern = /\W/g;
   let check = pattern.test(req.params.id);
