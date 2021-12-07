@@ -90,6 +90,7 @@ class Payment extends Component {
     data["room_fee"] = this.state.active_room.room_fee;
     data["paid"] = this.state.fee;
     data["period"] = content.period;
+    data["tenant_id"] = this.state.active_tenant.tenant_id;
 
     let room_no = this.state.formData.find(
       (i) => i.room_no === this.state.active_room.room_no
@@ -107,9 +108,43 @@ class Payment extends Component {
       this.setState({
         ...this.state,
         open: true,
-        messageState: "error",
+        messageState: "warning",
         message: "Room Payment Exists",
       });
+    }
+  };
+
+  handlePayment = async () => {
+    this.setState({
+      ...this.state,
+      open: true,
+      message: "Please Wait...",
+      messageState: "info",
+    });
+    const api = new Api();
+    let payment_content = {};
+    payment_content["data"] = this.state.formData;
+    payment_content["date"] = Date.now();
+    let result = await api.post("/new-payment", payment_content);
+    if (result !== "Error") {
+      if (result.data) {
+        this.setState({
+          ...this.state,
+          open: true,
+          messageState: "success",
+          message: result.data,
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+      } else {
+        this.setState({
+          ...this.state,
+          open: true,
+          messageState: "error",
+          message: result.data,
+        });
+      }
     }
   };
 
@@ -154,6 +189,7 @@ class Payment extends Component {
                     variant="contained"
                     color="primary"
                     style={{ marginRight: 10 }}
+                    onClick={this.handlePayment}
                   >
                     <span style={{ fontSize: "17.5px", marginRight: "10px" }}>
                       <i className="las la-save"></i>

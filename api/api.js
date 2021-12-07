@@ -122,6 +122,28 @@ router.post("/new-allocation", async (req, res) => {
   res.send({ data: "Allocation Successful", status: true });
 });
 
+router.post("/new-payment", async (req, res) => {
+  req.body.data.forEach((i) => {
+    conn.query(
+      `INSERT INTO payments_tbl SET ?`,
+      {
+        tenant_id: i.tenant_id,
+        room_id: i.room_id,
+        payment_duration: i.period,
+        payment_fee: i.paid,
+        payment_date: req.body.date,
+      },
+      (insert_err, insert_res) => {
+        if (insert_err) {
+          console.log(insert_err);
+          res.send({ data: "Error Occured.Try Again", status: false });
+        }
+      }
+    );
+  });
+  res.send({ data: "Payment Added", status: true });
+});
+
 router.get("/tenant-rooms/:id", async (req, res) => {
   conn.query(
     `SELECT * FROM tenant_room_tbl 
