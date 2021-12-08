@@ -4,6 +4,7 @@ import Nav from "./components/nav";
 import Header from "../../components/header";
 import Footer from "../../components/footer";
 import { Link } from "react-router-dom";
+import Api from "../../api/users";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -14,7 +15,42 @@ class Dashboard extends Component {
       open: false,
       message: "",
       messageState: "",
+      tenants: [],
+      rooms: [],
+      free: 0,
+      booked: 0,
     };
+    this.fetchRooms();
+    this.fetchTenants();
+  }
+
+  async fetchRooms() {
+    let result = (await Api.data("/rooms")) || [];
+    let free = 0;
+    let booked = 0;
+    if (result !== "Error") {
+      result.forEach((i) => {
+        i.room_status === "Free" ? free++ : booked++;
+      });
+      this.setState({
+        ...this.state,
+        rooms: result,
+        free: free,
+        booked: booked,
+      });
+    } else {
+      this.setState({
+        ...this.state,
+        rooms: [],
+        free: free,
+        booked: booked,
+      });
+    }
+  }
+
+  async fetchTenants() {
+    let result = (await Api.data("/tenants")) || [];
+    this.setState({ ...this.state, tenants: result === "Error" ? [] : result });
   }
 
   handleOpenActions = (e) => {
@@ -41,36 +77,36 @@ class Dashboard extends Component {
             <div className="cards">
               <div className="card-single">
                 <div className="">
-                  <h3>20</h3>
+                  <h3>{this.state.rooms.length}</h3>
                   <span>
                     Total Rooms <br />
                   </span>
                 </div>
                 <div className="">
-                  <span className="las la-users"> </span>
+                  <span className="las la-bed"> </span>
                 </div>
               </div>
               <div className="card-single">
                 <div className="">
-                  <h3>5</h3>
+                  <h3>{this.state.free}</h3>
                   <span>Free Rooms</span>
                 </div>
                 <div className="">
-                  <span className="las la-medkit"></span>
+                  <span className="las la-bed"></span>
                 </div>
               </div>
               <div className="card-single">
                 <div className="">
-                  <h3>15</h3>
+                  <h3>{this.state.booked}</h3>
                   <span>Occupied Rooms</span>
                 </div>
                 <div className="">
-                  <span className="las la-users"> </span>
+                  <span className="las la-bed"> </span>
                 </div>
               </div>
               <div className="card-single">
                 <div className="">
-                  <h3>12</h3>
+                  <h3>{this.state.tenants.length}</h3>
                   <span>Tenants</span>
                 </div>
                 <div className="">

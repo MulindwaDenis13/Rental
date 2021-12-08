@@ -1,5 +1,4 @@
 const router = require("express").Router();
-const e = require("express");
 const conn = require("../database/db");
 
 router.post("/new-room", async (req, res) => {
@@ -195,6 +194,39 @@ router.get("/search-room/:id", async (req, res) => {
       }
     );
   }
+});
+
+router.get("/rooms", async (req, res) => {
+  conn.query(
+    `SELECT * FROM 
+  rooms_tbl`,
+    (first_err, first_res) => {
+      if (first_err) throw first_err;
+      res.send(first_res);
+    }
+  );
+});
+
+router.get("/tenants", async (req, res) => {
+  conn.query(
+    `SELECT * FROM 
+  tenants_tbl`,
+    (first_err, first_res) => {
+      if (first_err) throw first_err;
+      res.send(first_res);
+    }
+  );
+});
+
+router.get("/payments", async (req, res) => {
+  conn.query(
+    `SELECT * FROM 
+  payments_tbl`,
+    (first_err, first_res) => {
+      if (first_err) throw first_err;
+      res.send(first_res);
+    }
+  );
 });
 
 module.exports = router;

@@ -42,7 +42,7 @@ class Nav extends Component {
                         this.props.active === "rooms" ? "active" : ""
                       } _a_replaced`}
                     >
-                      <span className="las la-address-book"></span>
+                      <span className="las la-bed"></span>
                       <span>Rooms</span>
                     </span>
                   </Link>

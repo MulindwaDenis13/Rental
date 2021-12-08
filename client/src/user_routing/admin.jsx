@@ -8,6 +8,7 @@ import Tenant from "../Routes/admin/tenant";
 import Room from "../Routes/admin/room";
 import RoomAllocation from "../Routes/admin/roomAllocation";
 import Payment from "../Routes/admin/payment";
+import Payments from "../Routes/admin/payments";
 import Error from "../components/404";
 
 class Admin extends Component {
@@ -24,6 +25,7 @@ class Admin extends Component {
             <Route path="/new-room" exact component={Room} />
             <Route path="/new-tenant" exact component={Tenant} />
             <Route path="/new-payment" exact component={Payment} />
+            <Route path="/payments" exact component={Payments} />
             <Route
               path="/new-room-allocation"
               exact

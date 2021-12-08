@@ -187,7 +187,7 @@ class Room extends Component {
                                 margin: "20px",
                               }}
                             >
-                              <InputLabel id="type">RoomType</InputLabel>
+                              <InputLabel id="type">Type</InputLabel>
                               <Select
                                 inputProps={{ name: "type" }}
                                 id="select_room_type"
