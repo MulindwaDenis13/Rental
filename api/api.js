@@ -143,6 +143,30 @@ router.post("/new-payment", async (req, res) => {
   res.send({ data: "Payment Added", status: true });
 });
 
+router.post("/new-expense", async (req, res) => {
+  let { tenant, room, date, content } = req.body;
+  content.forEach((i) => {
+    conn.query(
+      `INSERT INTO 
+    expenses_tbl SET ?`,
+      {
+        expense_date: date,
+        tenant_id: tenant,
+        room_id: room,
+        expense_amount: i.amount,
+        expense_for: i.name,
+      },
+      (insert_err, insert_res) => {
+        if (insert_err) {
+          console.log(insert_err);
+          res.send({ data: "An Error Occured", status: false });
+        }
+      }
+    );
+  });
+  res.send({ data: "Expense Added", status: true });
+});
+
 router.get("/tenant-rooms/:id", async (req, res) => {
   conn.query(
     `SELECT * FROM tenant_room_tbl 

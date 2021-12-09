@@ -188,6 +188,11 @@ class Dashboard extends Component {
                           New Payment
                         </MenuItem>
                       </Link>
+                      <Link to="/new-expense">
+                        <MenuItem onClick={this.handleCloseActions}>
+                          New Expense
+                        </MenuItem>
+                      </Link>
                     </Menu>
                   </div>
                   <div className="card-body"></div>
