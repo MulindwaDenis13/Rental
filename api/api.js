@@ -253,4 +253,15 @@ router.get("/payments", async (req, res) => {
   );
 });
 
+router.get("/expenses", async (req, res) => {
+  conn.query(
+    `SELECT * FROM 
+  expenses_tbl`,
+    (first_err, first_res) => {
+      if (first_err) throw first_err;
+      res.send(first_res);
+    }
+  );
+});
+
 module.exports = router;

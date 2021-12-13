@@ -12,6 +12,7 @@ import RoomAllocation from "../Routes/admin/roomAllocation";
 import Payment from "../Routes/admin/payment";
 import Payments from "../Routes/admin/payments";
 import Expense from "../Routes/admin/expense";
+import Expenses from "../Routes/admin/expenses";
 import Error from "../components/404";
 
 class Admin extends Component {
@@ -32,6 +33,7 @@ class Admin extends Component {
             <Route path="/new-payment" exact component={Payment} />
             <Route path="/payments" exact component={Payments} />
             <Route path="/new-expense" exact component={Expense} />
+            <Route path="/expenses" exact component={Expenses} />
             <Route
               path="/new-room-allocation"
               exact
