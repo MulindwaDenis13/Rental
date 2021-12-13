@@ -79,7 +79,7 @@ class Nav extends Component {
                       } _a_replaced`}
                     >
                       <span className="las la-money-bill"></span>
-                      <span>Payments</span>
+                      <span>Expenses</span>
                     </span>
                   </Link>
                 </li>

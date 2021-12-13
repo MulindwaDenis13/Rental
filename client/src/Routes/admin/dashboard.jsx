@@ -151,7 +151,49 @@ class Dashboard extends Component {
                       </Link>
                     </Menu>
                   </div>
-                  <div className="card-body"></div>
+                  <div className="card-body">
+                    <table width="100%">
+                      <thead>
+                        <tr>
+                          <td>Number</td>
+                          <td>Room Fee(UGX)</td>
+                          <td>Room Type</td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {this.state.rooms.length === 0 ? (
+                          <tr>
+                            <td>No Free Room</td>
+                          </tr>
+                        ) : this.state.rooms.length >= 5 ? (
+                          this.state.rooms
+                            .slice(
+                              this.state.rooms.length - 5,
+                              this.state.rooms.length
+                            )
+                            .map((x, y) => {
+                              return (
+                                <tr key={y}>
+                                  <td>{x.room_no}</td>
+                                  <td>{x.room_fee}</td>
+                                  <td>{x.room_type}</td>
+                                </tr>
+                              );
+                            })
+                        ) : (
+                          this.state.rooms.map((v, i) => {
+                            return (
+                              <tr key={i}>
+                                <td>{v.room_no}</td>
+                                <td>{v.room_fee}</td>
+                                <td>{v.room_type}</td>
+                              </tr>
+                            );
+                          })
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
               <div className="projects">

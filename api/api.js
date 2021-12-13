@@ -181,6 +181,19 @@ router.get("/tenant-rooms/:id", async (req, res) => {
   );
 });
 
+router.get("/booked-rooms", async (req, res) => {
+  conn.query(
+    `SELECT * FROM rooms_tbl 
+    JOIN tenant_room_tbl ON 
+    rooms_tbl.room_id = tenant_room_tbl.rooms_id JOIN tenants_tbl 
+    ON tenants_tbl.tenant_id = tenant_room_tbl.tenant_id`,
+    (first_err, first_res) => {
+      if (first_err) throw first_err;
+      res.send(first_res);
+    }
+  );
+});
+
 router.get("/search-tenant/:id", async (req, res) => {
   let pattern = /\W/g;
   let check = pattern.test(req.params.id);
