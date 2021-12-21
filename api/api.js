@@ -167,6 +167,32 @@ router.post("/new-expense", async (req, res) => {
   res.send({ data: "Expense Added", status: true });
 });
 
+router.get("/tenant-expenses/:id", async (req, res) => {
+  conn.query(
+    `SELECT * FROM expenses_tbl JOIN
+     rooms_tbl ON expenses_tbl.room_id = rooms_tbl.room_id 
+     WHERE tenant_id = ?`,
+    req.params.id,
+    (first_err, first_res) => {
+      if (first_err) throw first_err;
+      res.send(first_res);
+    }
+  );
+});
+
+router.get("/tenant-payments/:id", async (req, res) => {
+  conn.query(
+    `SELECT * FROM payments_tbl JOIN 
+    rooms_tbl ON payments_tbl.room_id = rooms_tbl.room_id 
+    WHERE tenant_id = ?`,
+    req.params.id,
+    (first_err, first_res) => {
+      if (first_err) throw first_err;
+      res.send(first_res);
+    }
+  );
+});
+
 router.get("/tenant-rooms/:id", async (req, res) => {
   conn.query(
     `SELECT * FROM tenant_room_tbl 

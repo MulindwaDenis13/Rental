@@ -163,7 +163,7 @@ class Dashboard extends Component {
                       <tbody>
                         {this.state.rooms.length === 0 ? (
                           <tr>
-                            <td>No Free Room</td>
+                            <td>No Room</td>
                           </tr>
                         ) : this.state.rooms.length >= 5 ? (
                           this.state.rooms
@@ -237,7 +237,52 @@ class Dashboard extends Component {
                       </Link>
                     </Menu>
                   </div>
-                  <div className="card-body"></div>
+                  <div className="card-body">
+                    <table width="100%">
+                      <thead>
+                        <tr>
+                          <td>Firstname</td>
+                          <td>Lastname</td>
+                          <td>Address</td>
+                          <td>Contact</td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {this.state.tenants.length === 0 ? (
+                          <tr>
+                            <td>No Tenant</td>
+                          </tr>
+                        ) : this.state.tenants.length >= 5 ? (
+                          this.state.tenants
+                            .slice(
+                              this.state.tenants.length - 5,
+                              this.state.tenants.length
+                            )
+                            .map((x, y) => {
+                              return (
+                                <tr key={y}>
+                                  <td>{x.tenant_first_name}</td>
+                                  <td>{x.tenant_last_name}</td>
+                                  <td>{x.tenant_address}</td>
+                                  <td>{x.tenant_contact}</td>
+                                </tr>
+                              );
+                            })
+                        ) : (
+                          this.state.tenants.map((v, i) => {
+                            return (
+                              <tr key={i}>
+                                <td>{v.tenant_first_name}</td>
+                                <td>{v.tenant_last_name}</td>
+                                <td>{v.tenant_address}</td>
+                                <td>{v.tenant_contact}</td>
+                              </tr>
+                            );
+                          })
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </div>

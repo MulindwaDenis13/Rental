@@ -77,7 +77,6 @@ class Rooms extends Component {
                         width: "50%",
                       }}
                       onKeyUp={async (e) => {
-                        console.log(e.target.value);
                         let room = this.state.free.find(
                           (i) => i.room_no === e.target.value
                         );
@@ -199,6 +198,7 @@ class Rooms extends Component {
                                 <td>{v.room_no}</td>
                                 <td>{v.room_fee}</td>
                                 <td>{v.room_type}</td>
+                                <td>{v.tenant_first_name}</td>
                               </tr>
                             );
                           })
