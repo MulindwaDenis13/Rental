@@ -63,12 +63,19 @@ class Payment extends Component {
   };
 
   handlePeriod = (e) => {
-    e.target.value === "month"
-      ? this.setState({ ...this.state, fee: this.state.active_room.room_fee })
-      : this.setState({
-          ...this.state,
-          fee: this.state.active_room.room_fee * 3,
-        });
+    if (e.target.value === "month") {
+      this.setState({ ...this.state, fee: this.state.active_room.room_fee });
+    } else if (e.target.value === "quarter") {
+      this.setState({
+        ...this.state,
+        fee: this.state.active_room.room_fee * 3,
+      });
+    } else {
+      this.setState({
+        ...this.state,
+        fee: this.state.active_room.room_fee * 6,
+      });
+    }
   };
 
   handleSubmit = (e) => {
@@ -358,6 +365,7 @@ class Payment extends Component {
                               >
                                 <MenuItem value="month">Monthly</MenuItem>
                                 <MenuItem value="quarter">Quarterly</MenuItem>
+                                <MenuItem value="half">Half</MenuItem>
                               </Select>
                             </FormControl>
                             <TextField
