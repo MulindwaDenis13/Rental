@@ -1,6 +1,23 @@
 const router = require("express").Router();
 const conn = require("../database/db");
 
+router.post("/login", async (req, res) => {
+  conn.query(
+    `SELECT * FROM users_tbl WHERE user_name = ? AND password = ?`,
+    [req.body.username, req.body.password],
+    (first_err, first_res) => {
+      if (first_err) {
+        console.log(first_err);
+        res.send({ data: "An Error Occured", status: false });
+      } else {
+        first_res.length === 0
+          ? res.send({ status: false })
+          : res.send({ status: true, user: first_res[0] });
+      }
+    }
+  );
+});
+
 router.post("/new-room", async (req, res) => {
   let { number, fee, type } = req.body;
   conn.query(
