@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const conn = require("../database/db");
 
+//login user
 router.post("/login", async (req, res) => {
   conn.query(
     `SELECT * FROM users_tbl WHERE user_name = ? AND password = ?`,
@@ -18,6 +19,46 @@ router.post("/login", async (req, res) => {
   );
 });
 
+//add user
+router.post("/new-user", async (req, res) => {
+  conn.query(
+    `SELECT * FROM users_tbl WHERE user_name = ?`,
+    req.body.username,
+    (first_err, first_res) => {
+      if (first_err) {
+        console.log(first_err);
+        res.send({ data: "An Error Occured", status: false });
+      } else {
+        first_res.length > 0
+          ? res.send({
+              data: `Username  ${req.body.username} exists`,
+              status: false,
+            })
+          : conn.query(
+              `INSERT INTO users_tbl SET ?`,
+              {
+                user_name: req.body.username,
+                phone: req.body.phonenumber,
+                password: "admin",
+              },
+              (insert_err, insert_res) => {
+                if (insert_err) {
+                  console.log(insert_err);
+                  res.send({
+                    data: "Room not added. Try Again",
+                    status: false,
+                  });
+                } else {
+                  res.send({ data: "Room Added Successfully", status: true });
+                }
+              }
+            );
+      }
+    }
+  );
+});
+
+//add room
 router.post("/new-room", async (req, res) => {
   let { number, fee, type } = req.body;
   conn.query(
@@ -58,6 +99,7 @@ router.post("/new-room", async (req, res) => {
   );
 });
 
+//add tenant
 router.post("/new-tenant", async (req, res) => {
   let { first_name, last_name, contact, address } = req.body;
   conn.query(
@@ -98,6 +140,7 @@ router.post("/new-tenant", async (req, res) => {
   );
 });
 
+//allocate rooms to tenants
 router.post("/new-allocation", async (req, res) => {
   let { rooms, tenant, date } = req.body;
   rooms.forEach((i) => {
@@ -138,6 +181,7 @@ router.post("/new-allocation", async (req, res) => {
   res.send({ data: "Allocation Successful", status: true });
 });
 
+//tenant new payment
 router.post("/new-payment", async (req, res) => {
   req.body.data.forEach((i) => {
     conn.query(
@@ -160,6 +204,7 @@ router.post("/new-payment", async (req, res) => {
   res.send({ data: "Payment Added", status: true });
 });
 
+//new expense
 router.post("/new-expense", async (req, res) => {
   let { tenant, room, date, content } = req.body;
   content.forEach((i) => {
@@ -184,6 +229,7 @@ router.post("/new-expense", async (req, res) => {
   res.send({ data: "Expense Added", status: true });
 });
 
+//get tenant expenses
 router.get("/tenant-expenses/:id", async (req, res) => {
   conn.query(
     `SELECT * FROM expenses_tbl JOIN
@@ -197,6 +243,7 @@ router.get("/tenant-expenses/:id", async (req, res) => {
   );
 });
 
+//get tenant payments
 router.get("/tenant-payments/:id", async (req, res) => {
   conn.query(
     `SELECT * FROM payments_tbl JOIN 
@@ -210,6 +257,7 @@ router.get("/tenant-payments/:id", async (req, res) => {
   );
 });
 
+//get tenant rooms
 router.get("/tenant-rooms/:id", async (req, res) => {
   conn.query(
     `SELECT * FROM tenant_room_tbl 
@@ -224,6 +272,7 @@ router.get("/tenant-rooms/:id", async (req, res) => {
   );
 });
 
+//get booked rooms
 router.get("/booked-rooms", async (req, res) => {
   conn.query(
     `SELECT * FROM rooms_tbl 
@@ -237,6 +286,7 @@ router.get("/booked-rooms", async (req, res) => {
   );
 });
 
+//search tenant
 router.get("/search-tenant/:id", async (req, res) => {
   let pattern = /\W/g;
   let check = pattern.test(req.params.id);
@@ -256,6 +306,7 @@ router.get("/search-tenant/:id", async (req, res) => {
   }
 });
 
+//search room
 router.get("/search-room/:id", async (req, res) => {
   let pattern = /\W/g;
   let check = pattern.test(req.params.id);
@@ -276,6 +327,7 @@ router.get("/search-room/:id", async (req, res) => {
   }
 });
 
+//get all rooms
 router.get("/rooms", async (req, res) => {
   conn.query(
     `SELECT * FROM 
@@ -287,6 +339,7 @@ router.get("/rooms", async (req, res) => {
   );
 });
 
+//get all tenants
 router.get("/tenants", async (req, res) => {
   conn.query(
     `SELECT * FROM 
@@ -298,6 +351,7 @@ router.get("/tenants", async (req, res) => {
   );
 });
 
+//get all payments
 router.get("/payments", async (req, res) => {
   conn.query(
     `SELECT * FROM 
@@ -309,6 +363,7 @@ router.get("/payments", async (req, res) => {
   );
 });
 
+//get all expenses
 router.get("/expenses", async (req, res) => {
   conn.query(
     `SELECT * FROM 

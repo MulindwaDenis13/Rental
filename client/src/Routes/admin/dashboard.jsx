@@ -235,6 +235,7 @@ class Dashboard extends Component {
                           New Expense
                         </MenuItem>
                       </Link>
+                      <MenuItem>New User</MenuItem>
                     </Menu>
                   </div>
                   <div className="card-body">
