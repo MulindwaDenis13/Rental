@@ -45,7 +45,7 @@ router.post("/new-user", async (req, res) => {
                 if (insert_err) {
                   console.log(insert_err);
                   res.send({
-                    data: "Room not added. Try Again",
+                    data: "User not added. Try Again",
                     status: false,
                   });
                 } else {

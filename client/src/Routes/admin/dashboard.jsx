@@ -1,10 +1,27 @@
 import React, { Component } from "react";
-import { Button, Menu, MenuItem } from "@material-ui/core";
+import {
+  IconButton,
+  Snackbar,
+  Button,
+  Menu,
+  MenuItem,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TextField,
+} from "@material-ui/core";
 import Nav from "./components/nav";
 import Header from "../../components/header";
 import Footer from "../../components/footer";
+import MuiAlert from "@material-ui/lab/Alert";
 import { Link } from "react-router-dom";
 import Api from "../../api/users";
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 class Dashboard extends Component {
   constructor(props) {
@@ -13,6 +30,7 @@ class Dashboard extends Component {
       AnchorEl: null,
       AnchorElRooms: null,
       open: false,
+      dialog: false,
       message: "",
       messageState: "",
       tenants: [],
@@ -23,6 +41,57 @@ class Dashboard extends Component {
     this.fetchRooms();
     this.fetchTenants();
   }
+
+  closePopUp = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    this.setState({
+      ...this.state,
+      open: false,
+      message: "Please Wait...",
+      messageState: "info",
+    });
+  };
+
+  handleClose = () => {
+    this.setState({ ...this.state, dialog: false });
+  };
+
+  handleUser = async (e) => {
+    e.preventDefault();
+    this.setState({
+      ...this.state,
+      open: true,
+      messageState: "info",
+      message: "Please Wait...",
+    });
+    const fd = new FormData(e.target);
+    let _fcontent = {};
+    fd.forEach((value, key) => {
+      _fcontent[key] = value;
+    });
+    const api = new Api();
+    const result = await api.post("/new-user", _fcontent);
+    if (result !== "Error") {
+      if (result.status === true) {
+        this.setState({
+          ...this.state,
+          message: result.data,
+          messageState: "success",
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 500);
+      } else {
+        this.setState({
+          ...this.state,
+          message: result.data,
+          messageState: "error",
+        });
+      }
+    }
+  };
 
   async fetchRooms() {
     let result = (await Api.data("/rooms")) || [];
@@ -69,6 +138,31 @@ class Dashboard extends Component {
   render() {
     return (
       <>
+        <Snackbar
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "center",
+          }}
+          open={this.state.open}
+          autoHideDuration={5000}
+          onClose={this.closePopUp}
+          action={
+            <React.Fragment>
+              <IconButton
+                size="small"
+                aria-label="close"
+                color="inherit"
+                onClick={this.closePopUp}
+              >
+                <i className="las la-times"></i>
+              </IconButton>
+            </React.Fragment>
+          }
+        >
+          <Alert onClose={this.closePopUp} severity={this.state.messageState}>
+            {this.state.message}
+          </Alert>
+        </Snackbar>
         <input type="checkbox" id="nav-toggle" defaultChecked />
         <Nav active="dashboard" />
         <div className="main-content">
@@ -235,7 +329,13 @@ class Dashboard extends Component {
                           New Expense
                         </MenuItem>
                       </Link>
-                      <MenuItem>New User</MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          this.setState({ ...this.state, dialog: true });
+                        }}
+                      >
+                        New User
+                      </MenuItem>
                     </Menu>
                   </div>
                   <div className="card-body">
@@ -290,6 +390,46 @@ class Dashboard extends Component {
           </main>
           <Footer />
         </div>
+
+        <Dialog
+          open={this.state.dialog}
+          onClose={this.handleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">Add User</DialogTitle>
+          <form autoComplete="off" onSubmit={this.handleUser}>
+            <DialogContent>
+              <DialogContentText>
+                <TextField
+                  name="username"
+                  variant="standard"
+                  label="Username"
+                  style={{
+                    width: "85%",
+                    margin: "20px",
+                  }}
+                />
+                <TextField
+                  name="phonenumber"
+                  variant="standard"
+                  label="Contact"
+                  style={{
+                    width: "85%",
+                    margin: "20px",
+                  }}
+                />
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={this.handleClose} color="primary">
+                Cancel
+              </Button>
+              <Button type="submit" color="primary">
+                Save
+              </Button>
+            </DialogActions>
+          </form>
+        </Dialog>
       </>
     );
   }
